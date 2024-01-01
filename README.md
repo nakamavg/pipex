@@ -33,4 +33,15 @@ y el padre acaba antes puede haber problemas en este caso:
 
 ### Que pasa si tenemos multiples forks?
 
+-En este caso 
+
+```c
+int main()
+{
+	int id =fork();
+	fork();
+}
+```
+Se creara una bifurcacion para el proceso hijo y otra para el padre de locos
+
 
