@@ -23,7 +23,7 @@ Queria empezar a construir y adquirir conocimientos haciendo unas pequeñas llam
 
 - Para demostrar esto tenemos un pequeño main 
 
-![basicos.c](/images/image.png)
+![basicos.c](/images/conwait.png)
 
 si quitas el wait y no esperas que el/los procesos hijos terminen 
 y el padre acaba antes puede haber problemas en este caso:
