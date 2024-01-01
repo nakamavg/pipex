@@ -31,3 +31,6 @@ y el padre acaba antes puede haber problemas en este caso:
 ![Alt text](/images/sinwait.png)
 
 
+### Que pasa si tenemos multiples forks?
+
+
