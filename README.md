@@ -42,6 +42,7 @@ int main()
 	fork();
 }
 ```
-Se creara una bifurcacion para el proceso hijo y otra para el padre de locos
+Se creara una bifurcacion para el proceso hijo y otra para el padre de locos y si lo llamamos otra vez ?
+todos tendran un nuevo proceso haciendo un efecto escalera bien chulo
 
 
