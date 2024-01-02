@@ -6,7 +6,7 @@
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 20:14:24 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/02 06:11:14 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/02 17:48:39 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ Ejemplo execve y fork y pipe
 #include <stdio.h>	//printf
 #include <unistd.h>	//execve
 #include <sys/wait.h>	//wait
-#include "lib/libft/libft.h"
+#include "include/pipex.h"
 int check_numargc(int argc , char **arg)
 {
 	if (argc < 5)
 	{
-		printf("wrong arguments\n");
+		ft_printf("wrong arguments\n");
 		exit(EXIT_FAILURE);
 	}
 	while(*arg)
 	{
-		printf("%s\n", *arg);
+		ft_printf("%s\n", *arg);
 		arg++;
 	}
 return (EXIT_SUCCESS);
@@ -58,8 +58,8 @@ char *path2;
 	path2=create_path(argv[3]);
 
 //esto es para concatenar el path con el nombre del ejecutable
-printf("Ruta del programa 1 : %s\n", path);
-printf("Ruta del programa 2 : %s\n", path2);
+ft_printf("Ruta del programa 1 : %s\n", path);
+ft_printf("Ruta del programa 2 : %s\n", path2);
 int pid;
 int fd[2];
 pipe(fd);

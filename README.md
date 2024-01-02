@@ -7,6 +7,7 @@
 		- [`wait()`](#wait)
 		- [Funcionamiento de `pipe()` en c](#funcionamiento-de-pipe-en-c)
 		- [`execve` y `dup`](#execve-y-dup)
+		- [La función access](#funcionamiento-de-accessconst-char-pathname-int-mode)
 
 
 
@@ -196,22 +197,57 @@ Ruta del programa 2 : /bin/wc
 ```
 [Volver al índice](#índice)
 
-A tener en cuenta el proximo dia
+### Funcionamiento de `access(const char *pathname, int mode)` 
 
-1. Estudiar pasar todo a una struct
+- Pertenece a `<unistd.h>`
+
+- Toma dos argumentos la ruta del archivo y el tipo de acceso que se quiere comprobar
+
+	- el tipo de acceso puede ser una combinacion de las siguientes const
+
+		-`F_OK`: si existe el archivo
+		-`R_OK` : permiso de lectura
+		-`W_OK`: Permiso de escritura
+		-`X_OK`: Permiso de ejecucion
+- Devuelve 0  si el proceso tiene el acceso solicitado al archivo y -1 si no lo tiene o ocurrre algun  error 
+
 ```c
-typedef struct s_command
+int main()
 {
-    char *path;
-    char **argv;
-    int *fd;
-    int close_fd;
-    int dup_fd;
-}              t_command;
+	char *path = "/bin/lss";
+	if (access(path, X_OK) == 0)
+		printf("existe\n");
+	else
+		printf("no existe\n");
+		
+	if (access("/etc/passwd", R_OK) == 0) {
+    printf("El archivo se puede leer.\n");
+} else {
+    printf("El archivo no se puede leer.\n");
+}
+	if (access("/etc/passwd", W_OK) == 0)
+    	printf("El archivo se puede escribir.\n");
+	else 
+    	printf("El archivo no se puede escribir.\n");
 
-
-
-
+	return (0);
+}
+```
+sin sudo
+```bash
+nakama@DESKTOP-FIDJ5EI:~/pipex$ ./a.out 
+no existe
+El archivo se puede leer.
+El archivo no se puede escribir.
+```
+con sudo
+```bash
+nakama@DESKTOP-FIDJ5EI:~/pipex$ sudo ./a.out 
+no existe
+El archivo se puede leer.
+El archivo se puede escribir.
+```
+[Volver al índice](#índice)
 
 
 

@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"get_next_line.h": "c",
-		"stdarg.h": "c"
+		"stdarg.h": "c",
+		"pipex.h": "c"
 	}
 }

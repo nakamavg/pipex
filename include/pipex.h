@@ -6,40 +6,15 @@
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 21:16:32 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/01 22:10:30 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/02 19:14:53 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-// standard libraries
 # include <errno.h>
-
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-SRC = main.c pipex.c
-OBJ = $(SRC:.c=.o)
-EXEC = pipex
-
-all: $(EXEC)
-
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(EXEC)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-clean:
-	rm -f $(OBJ)
-
-fclean: clean
-	rm -f $(EXEC)
-
-re: fclean all
-
-.PHONY: all clean fclean re
-
+# include <sys/types.h>
 # include <fcntl.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -48,7 +23,27 @@ re: fclean all
 # include <sys/wait.h>
 # include <unistd.h>
 // personal libraries
-# include "get_next_line.h"
-# include "libft.h"
+# include "../lib/libft/libft.h"
+
+//list
+typedef struct s_pipex
+{
+	pid_t	pid1; //Pid del hijo 1
+	pid_t	pid2;//Pid del hijo 2
+	int		tube[2];//Tuberia para comunicar a los hijos
+	int		infile; //Fichero de entrada
+	int		outfile; //Fichero de salida
+	char	*paths;//Variable de entorno PATH
+	char	**cmd_paths; //Array de paths para ejecutar los comandos
+	char	**cmd_args; //Array de argumentos para ejecutar los comandos
+	char	*cmd; //Comando a ejecutar
+}t_pipex;
+
+//error 
+void	send_error(char *str);
+//init
+t_pipex	*init_pipex(int argc , char **argv, char **envp);
+//utils
+char	*create_path(char **envp);
 
 #endif
