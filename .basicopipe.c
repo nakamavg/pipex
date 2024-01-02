@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   basicopipe.c                                       :+:      :+:    :+:   */
+/*   .basicopipe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 23:28:58 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/02 01:08:35 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/02 17:23:15 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
-#include "lib/get_next_line/get_next_line.h"
 #include "lib/libft/libft.h"
 #include <sys/wait.h>
 

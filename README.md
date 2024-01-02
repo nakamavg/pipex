@@ -196,6 +196,18 @@ Ruta del programa 2 : /bin/wc
 ```
 [Volver al índice](#índice)
 
+A tener en cuenta el proximo dia
+
+1. Estudiar pasar todo a una struct
+```c
+typedef struct s_command
+{
+    char *path;
+    char **argv;
+    int *fd;
+    int close_fd;
+    int dup_fd;
+}              t_command;
 
 
 

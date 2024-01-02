@@ -6,7 +6,7 @@
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 20:14:24 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/02 05:30:06 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/02 06:11:14 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ char *create_path(char *arg)
 	char *tmp;
 	tmp = ft_strjoin(path, arg);
 	return (tmp);
+}
+
+void execute_command(char *path, char **argv, int *fd, int close_fd, int dup_fd)
+{
+    char *cmd[] = {argv[0], argv[1], NULL};
+    close(fd[close_fd]);
+    dup2(fd[dup_fd], dup_fd);
+    close(fd[dup_fd]);
+    execve(path, cmd, NULL);
 }
 int main(int argc, char **argv, char **envp )
 {
