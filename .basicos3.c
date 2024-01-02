@@ -1,43 +1,84 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   basicos2.c                                         :+:      :+:    :+:   */
+/*   .basicos3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 20:14:24 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/01 22:13:27 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/02 05:30:06 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-Ejemplo basico de como funciona execve con comandos pasados por argumento
-con padre hijo donde usamos el comando echo para decir soy el hijo y soy el padre
-
+Ejemplo execve y fork y pipe
 */
-
-#include <unistd.h> //fork y execlp
+#include <stdio.h>
+#include <stdlib.h>	//exit
 #include <stdio.h>	//printf
-#include <sys/wait.h> //wait
-
-int main()
+#include <unistd.h>	//execve
+#include <sys/wait.h>	//wait
+#include "lib/libft/libft.h"
+int check_numargc(int argc , char **arg)
 {
-	int pid = fork(); // crea un proceso hijo y devuelve el id del proceso hijo
-	char *hijo = "Soy el proceso hijo\n";
-	char *padre = "Soy el proceso padre\n";
-	char *error = "Error al crear el proceso hijo\n";
-
-	if (pid == -1) // si el id es -1 es que ha habido un error
-		printf("%s", error);
-	else if (pid == 0) // Validamos al proceso hijo
+	if (argc < 5)
 	{
-		char *argv[] = {"echo", hijo, NULL};
-		execve("/bin/echo", argv, NULL);
+		printf("wrong arguments\n");
+		exit(EXIT_FAILURE);
 	}
-	else // Validamos al proceso padre
+	while(*arg)
 	{
-		wait(NULL); // espera a que el hijo termine
-		char *argv[] = {"echo", padre, NULL};
-		execve("/bin/echo", argv, NULL);
+		printf("%s\n", *arg);
+		arg++;
 	}
+return (EXIT_SUCCESS);
 }
+char *create_path(char *arg)
+{
+	char *path = "/bin/";
+	char *tmp;
+	tmp = ft_strjoin(path, arg);
+	return (tmp);
+}
+int main(int argc, char **argv, char **envp )
+{
+check_numargc(argc, argv);
+char *path;
+char *path2;
+	path=create_path(argv[1]);
+	path2=create_path(argv[3]);
+
+//esto es para concatenar el path con el nombre del ejecutable
+printf("Ruta del programa 1 : %s\n", path);
+printf("Ruta del programa 2 : %s\n", path2);
+int pid;
+int fd[2];
+pipe(fd);
+pid = fork();
+char *cmd1[] = {argv[1], argv[2], NULL};
+char *cmd2[] = {argv[3], argv[4], NULL};
+wait(NULL);
+	if (pid == 0)
+	{
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		execve(path,cmd1, NULL);
+	}
+	else
+	{
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		execve(path2, cmd2, NULL);
+	}
+	
+return 0;
+}
+
+
+
+
+
+
+
