@@ -1,5 +1,13 @@
+# Índice
 
-import os
+- [Pipex](#pipex)
+- [Diario de a bordo](#diario-de-a-bordo)
+	- [Empezando mis investigaciones](#empezando-mis-investigaciones)
+		- [`fork()`](#fork)
+		- [`wait()`](#wait)
+		- [Funcionamiento de `pipe()` en c](#funcionamiento-de-pipe-en-c)
+
+
 
 # Pipex
 
@@ -44,6 +52,7 @@ int main()
 ```
 Se creara una bifurcacion para el proceso hijo y otra para el padre de locos y si lo llamamos otra vez ?
 todos tendran un nuevo proceso haciendo un efecto escalera bien chulo
+[Volver al índice](#índice)
 
 ### Funcionamiento de `pipe()` en c
 
@@ -92,7 +101,7 @@ hola mundo
 
 - si es el caso de estar en el proceso padre cierra el fd de salida , lee lo que hay en el fd de entrada que para el es el [0] imprime lo que conseguimos y cerramos el fd de entrada.
 
-
+[Volver al índice](#índice)
 
 
 
