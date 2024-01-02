@@ -132,8 +132,9 @@ hola mundo
 			-l
 			Ruta del programa 1 : /bin/ls
 			Ruta del programa 2 : /bin/wc
-	```
-	como lo que estoy probando esta todo dentro de bin es facil sacar la ruta
+```
+
+- como lo que estoy probando esta todo dentro de bin es facil sacar la ruta
 
 - el segundo parametro de execve es el comando y los parametros, siempre debe acabar en null
 
