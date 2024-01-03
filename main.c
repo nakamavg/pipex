@@ -1,66 +1,76 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/02 18:01:59 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/02 19:18:17 by dgomez-m         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "include/pipex.h"
 
- void	check_numargc(int argc)
+void check_numargc(int argc)
 {
 	if (argc != 5)
-		return (send_error("Error: number of arguments\n"));
-	
+		return (send_error(ERR_INPUT));
 }
 
-char	*create_path(char **envp)
+char *create_path(char **envp)
 {
-	while(*envp)
+	while (*envp)
 	{
 		if (ft_strncmp(*envp, "PATH=", 5) == 0)
 			return (*envp + 5);
 		envp++;
 	}
+	return (NULL); // Add return statement to avoid warning
 }
-	
- t_pipex	*init_pipex(int argc, char **argv, char **envp)
+static int open_infile_outfile(char *filename, bool is_outfile)
 {
-	t_pipex	*pipex;
+	int infile;
+	int outfile;
 
-	pipex = ft_calloc(1, sizeof(t_pipex));//reservamos memoria para la estructura
-	if (!pipex)
-		send_error("Error: calloc\n");
-	pipex->infile = open(argv[1], O_RDONLY);//abrimos el fichero de entrada
-	if (pipex->infile < 0)
-		send_error("Error: INFILE\n");
-	pipex->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC,  0000644);
-	if (pipex->outfile < 0)
-		send_error("Error OUTFILE\n");
-	if (pipe(pipex->tube) == -1)
-		send_error("Error: pipe\n"); 
-	pipex->paths = create_path(envp);//obtenemos la variable de entorno PATH
-	pipex->cmd_paths = ft_split(pipex->paths, ':');//obtenemos los paths
-	pipex->pid1 = fork();//creamos el primer hijo
-	if (pipex->pid1 == 0)
-		first_child(pipex);
-	
-	
-	
+	if (is_outfile)
+	{
+		outfile = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (outfile < 0)
+			send_error(ERR_OUTFILE);
+		return (outfile);
+	}
+	else
+	{
+		infile = open(filename, O_RDONLY);
+		if (infile < 0)
+			send_error(ERR_INFILE);
+		return (infile);
+	}
+}
+static void create_pipe(int *tube) {
+    if (pipe(tube) == -1)
+        send_error(ERR_PIPE); 
+}
+
+t_pipex init_pipex(int argc, char **argv, char **envp)
+{
+	t_pipex pipex;
 		
-
+	pipex.infile = open_infile_outfile(argv[1], false);
+	ft_printf("infile: %d\n", pipex.infile);
+	pipex.outfile = open_infile_outfile(argv[argc-1], true);
+	ft_printf("outfile: %d\n", pipex.outfile);
+	create_pipe(pipex.tube);
+	ft_printf("tube: %d\n", pipex.tube);
+	pipex.paths = create_path(envp);	
+	ft_printf("paths: %s\n", pipex.paths);		  
+	pipex.cmd_paths = ft_split(pipex.paths, ':'); 
+	ft_printf("cmd_paths: %s\n", pipex.cmd_paths[0]);
+	pipex.pid1 = fork();
+	if (pipex.pid1 == 0)
+		first_cmd(pipex, argv, envp);
+	pipex.pid2 = fork();
+	if (pipex.pid2 == 0)
+		second_cmd(pipex, argv, envp);	
+	close_pipes(&pipex);
+	wait_for_children(&pipex);
+	dad_free(&pipex);
 	return (pipex);
 }
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	t_pipex	*pipex;
-	
+	t_pipex pipex;
+
 	check_numargc(argc);
-	pipex = init_pipex(argc,argv, envp);
+	pipex = init_pipex(argc, argv, envp);
 	return (0);
 }

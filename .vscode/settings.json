@@ -2,6 +2,7 @@
 	"files.associations": {
 		"get_next_line.h": "c",
 		"stdarg.h": "c",
-		"pipex.h": "c"
+		"pipex.h": "c",
+		"waitstatus.h": "c"
 	}
 }

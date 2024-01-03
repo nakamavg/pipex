@@ -6,41 +6,26 @@
 #    By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/01 21:18:48 by dgomez-m          #+#    #+#              #
-#    Updated: 2024/01/01 22:08:54 by dgomez-m         ###   ########.fr        #
+#    Updated: 2024/01/03 01:24:52 by dgomez-m         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = pipex
+# Compiler and flags
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CC				=	gcc
+CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			+=	-g -Iinclude -Isrc -Ofast
+RM				=	rm -rf
+PIPEX			=	$(NAME)
+NAME			=	pipex
 
-LIBFT = lib/libft
-GNL = lib/get_next_line
+# Libft
 
-SRCS = basicos.c basicos2.c
-OBJS = $(SRCS:.c=.o)
+LIBFT_DIR		=	/lib/libft
+LIBFT_FILE		=	$(LIBFT_DIR)/$(LIBFT)
+CFLAGS			+=	-I $(LIBFT_DIR)/include
 
-all: $(NAME)
+# Sources and objects
 
-$(NAME): $(OBJS)
-    $(MAKE) -C $(LIBFT)
-    $(MAKE) -C $(GNL)
-    $(CC) $(CFLAGS) -I $(LIBFT) -I $(GNL) -L $(LIBFT) -lft -L $(GNL) -lgnl $(OBJS) -o $(NAME)
+SRC_DIR			=	src
 
-%.o: %.c
-    $(CC) $(CFLAGS) -c $< -o $@
-
-clean:
-    $(MAKE) -C $(LIBFT) clean
-    $(MAKE) -C $(GNL) clean
-    rm -f $(OBJS)
-
-fclean: clean
-    $(MAKE) -C $(LIBFT) fclean
-    $(MAKE) -C $(GNL) fclean
-    rm -f $(NAME)
-
-re: fclean all
-
-.PHONY: all clean fclean re
