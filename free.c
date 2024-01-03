@@ -6,14 +6,13 @@
 /*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 22:11:54 by dgomez-m          #+#    #+#             */
-/*   Updated: 2024/01/03 03:36:40 by dgomez-m         ###   ########.fr       */
+/*   Updated: 2024/01/03 04:54:20 by dgomez-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/pipex.h"
 
-
-void dad_free(t_pipex *pipex)
+void	dad_free(t_pipex *pipex)
 {
 	int	i;
 

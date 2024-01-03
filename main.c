@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dgomez-m <aecm.davidgomez@gmail.com>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/03 04:58:24 by dgomez-m          #+#    #+#             */
+/*   Updated: 2024/01/03 05:07:57 by dgomez-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "include/pipex.h"
 
-void check_numargc(int argc)
+void	check_numargc(int argc)
 {
 	if (argc != 5)
 		return (send_error(ERR_INPUT));
 }
 
-char *create_path(char **envp)
+char	*create_path(char **envp)
 {
 	while (*envp)
 	{
@@ -14,12 +26,13 @@ char *create_path(char **envp)
 			return (*envp + 5);
 		envp++;
 	}
-	return (NULL); // Add return statement to avoid warning
+	return (NULL);
 }
-static int open_infile_outfile(char *filename, bool is_outfile)
+
+static int	open_infile_outfile(char *filename, bool is_outfile)
 {
-	int infile;
-	int outfile;
+	int	infile;
+	int	outfile;
 
 	if (is_outfile)
 	{
@@ -36,41 +49,26 @@ static int open_infile_outfile(char *filename, bool is_outfile)
 		return (infile);
 	}
 }
-static void create_pipe(int *tube) {
-    if (pipe(tube) == -1)
-        send_error(ERR_PIPE); 
+
+static void	create_pipe(int *tube)
+{
+	if (pipe(tube) == -1)
+		send_error(ERR_PIPE);
 }
 
-t_pipex init_pipex(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_pipex pipex;
-		
+	t_pipex	pipex;
+
+	check_numargc(argc);
 	pipex.infile = open_infile_outfile(argv[1], false);
-	ft_printf("infile: %d\n", pipex.infile);
-	pipex.outfile = open_infile_outfile(argv[argc-1], true);
-	ft_printf("outfile: %d\n", pipex.outfile);
+	pipex.outfile = open_infile_outfile(argv[argc - 1], true);
 	create_pipe(pipex.tube);
-	ft_printf("tube: %d\n", pipex.tube);
-	pipex.paths = create_path(envp);	
-	ft_printf("paths: %s\n", pipex.paths);		  
-	pipex.cmd_paths = ft_split(pipex.paths, ':'); 
-	ft_printf("cmd_paths: %s\n", pipex.cmd_paths[0]);
-	pipex.pid1 = fork();
-	if (pipex.pid1 == 0)
-		first_cmd(pipex, argv, envp);
-	pipex.pid2 = fork();
-	if (pipex.pid2 == 0)
-		second_cmd(pipex, argv, envp);	
+	pipex.paths = create_path(envp);
+	pipex.cmd_paths = ft_split(pipex.paths, ':');
+	create_processes(&pipex, argv, envp);
 	close_pipes(&pipex);
 	wait_for_children(&pipex);
 	dad_free(&pipex);
-	return (pipex);
-}
-int main(int argc, char **argv, char **envp)
-{
-	t_pipex pipex;
-
-	check_numargc(argc);
-	pipex = init_pipex(argc, argv, envp);
 	return (0);
 }
